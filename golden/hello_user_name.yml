@@ -1,0 +1,638 @@
+in_source: |-
+ first_message:
+  .word '18What is your name?'
+
+ second_message:
+  .word '8 Hello, '
+
+ exclamation_point:
+  .word '!'
+
+ first_message_pointer:
+  .word first_message
+
+ second_message_pointer:
+  .word second_message
+
+ read_name_pointer:
+  .word name
+
+ write_name_pointer:
+  .word name
+
+ ascii_one:
+  .word 48
+
+ number_ten:
+  .word 10
+
+ in_addr:
+  .word 1
+
+ out_addr:
+  .word 2
+
+ _start:
+  write_first_message:  ; Пишем первое сообщение
+        mov r0, (first_message_pointer)
+        mov r1, ascii_one
+        sub r0, r1
+        mov r1, number_ten
+        mul r0, r1
+        mov r3, first_message_pointer
+        inc r3
+        mov first_message_pointer, r3
+        mov r1, (first_message_pointer)
+        mov r2, ascii_one
+        sub r1, r2
+        add r0, r1
+        inc r3
+        mov first_message_pointer, r3
+    load_first_message_char:
+        mov r1, (first_message_pointer)
+        dec r0
+        jg write_first_message_char
+        jmp read_name
+
+   write_first_message_char:
+    mov (out_addr), r1
+    mov r1, first_message_pointer
+    inc r1
+    mov first_message_pointer, r1
+    jmp load_first_message_char
+
+   read_name:
+    read_name_char:
+      mov r1, (in_addr)
+      mov r2, r1
+    store_name_char:
+      dec r1
+      jng write_second_message
+      inc r1
+      mov r0, (in_addr)
+      mov (read_name_pointer), r0
+      dec r1
+      jng write_second_message
+      mov r0, read_name_pointer
+      inc r0
+      mov read_name_pointer, r0
+      jmp store_name_char
+
+  write_second_message:  ; Пишем второе сообщение
+        mov r0, (second_message_pointer)
+        mov r1, ascii_one
+        sub r0, r1
+        mov r3, second_message_pointer
+        inc r3
+        mov second_message_pointer, r3
+    load_second_message_char:
+        mov r1, (second_message_pointer)
+        dec r0
+        jg write_second_message_char
+        jmp write_name
+
+   write_second_message_char:
+    mov (out_addr), r1
+    mov r1, second_message_pointer
+    inc r1
+    mov second_message_pointer, r1
+    jmp load_second_message_char
+
+  write_name:  ; Пишем имя
+    load_name_char:
+     mov r1, (write_name_pointer)
+     jmp write_name_char
+
+    write_name_char:
+     mov (out_addr), r1
+     mov r1, write_name_pointer
+     inc r1
+     mov write_name_pointer, r1
+     dec r2
+     jnz load_name_char
+     jmp write_exclamation_point
+
+  write_exclamation_point:  ; Пишем восклицательный знак
+    mov r0, exclamation_point
+    mov (out_addr), r0
+    hlt
+ 
+ name:
+  .word 0
+in_stdin: |-
+  [6, 'A', 'r', 's', 'e', 'n', 'i']
+out_code: |-
+ [{"index": 0, "opcode": "jmp", "arg_1": "45", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 4, "opcode": "nop", "arg_1": "49", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 5, "opcode": "nop", "arg_1": "56", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 6, "opcode": "nop", "arg_1": "87", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 7, "opcode": "nop", "arg_1": "104", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 8, "opcode": "nop", "arg_1": "97", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 9, "opcode": "nop", "arg_1": "116", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 10, "opcode": "nop", "arg_1": "32", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 11, "opcode": "nop", "arg_1": "105", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 12, "opcode": "nop", "arg_1": "115", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 13, "opcode": "nop", "arg_1": "32", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 14, "opcode": "nop", "arg_1": "121", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 15, "opcode": "nop", "arg_1": "111", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 16, "opcode": "nop", "arg_1": "117", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 17, "opcode": "nop", "arg_1": "114", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 18, "opcode": "nop", "arg_1": "32", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 19, "opcode": "nop", "arg_1": "110", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 20, "opcode": "nop", "arg_1": "97", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 21, "opcode": "nop", "arg_1": "109", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 22, "opcode": "nop", "arg_1": "101", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 23, "opcode": "nop", "arg_1": "63", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 24, "opcode": "nop", "arg_1": "0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 25, "opcode": "nop", "arg_1": "56", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 26, "opcode": "nop", "arg_1": "32", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 27, "opcode": "nop", "arg_1": "72", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 28, "opcode": "nop", "arg_1": "101", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 29, "opcode": "nop", "arg_1": "108", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 30, "opcode": "nop", "arg_1": "108", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 31, "opcode": "nop", "arg_1": "111", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 32, "opcode": "nop", "arg_1": "44", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 33, "opcode": "nop", "arg_1": "32", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 34, "opcode": "nop", "arg_1": "0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 35, "opcode": "nop", "arg_1": "33", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 36, "opcode": "nop", "arg_1": "0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 37, "opcode": "nop", "arg_1": "4", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 38, "opcode": "nop", "arg_1": "25", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 39, "opcode": "nop", "arg_1": "108", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 40, "opcode": "nop", "arg_1": "108", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 41, "opcode": "nop", "arg_1": "48", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 42, "opcode": "nop", "arg_1": "10", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 43, "opcode": "nop", "arg_1": "1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 44, "opcode": "nop", "arg_1": "2", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 45, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "37", "is_indirect_2": true},
+  {"index": 46, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "41", "is_indirect_2": false},
+  {"index": 47, "opcode": "sub", "arg_1": "r0", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 48, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "42", "is_indirect_2": false},
+  {"index": 49, "opcode": "mul", "arg_1": "r0", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 50, "opcode": "mov", "arg_1": "r3", "is_indirect_1": false, "arg_2": "37", "is_indirect_2": false},
+  {"index": 51, "opcode": "inc", "arg_1": "r3", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 52, "opcode": "mov", "arg_1": "37", "is_indirect_1": false, "arg_2": "r3", "is_indirect_2": false},
+  {"index": 53, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "37", "is_indirect_2": true},
+  {"index": 54, "opcode": "mov", "arg_1": "r2", "is_indirect_1": false, "arg_2": "41", "is_indirect_2": false},
+  {"index": 55, "opcode": "sub", "arg_1": "r1", "is_indirect_1": false, "arg_2": "r2", "is_indirect_2": false},
+  {"index": 56, "opcode": "add", "arg_1": "r0", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 57, "opcode": "inc", "arg_1": "r3", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 58, "opcode": "mov", "arg_1": "37", "is_indirect_1": false, "arg_2": "r3", "is_indirect_2": false},
+  {"index": 59, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "37", "is_indirect_2": true},
+  {"index": 60, "opcode": "dec", "arg_1": "r0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 61, "opcode": "jg", "arg_1": "63", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 62, "opcode": "jmp", "arg_1": "68", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 63, "opcode": "mov", "arg_1": "44", "is_indirect_1": true, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 64, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "37", "is_indirect_2": false},
+  {"index": 65, "opcode": "inc", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 66, "opcode": "mov", "arg_1": "37", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 67, "opcode": "jmp", "arg_1": "59", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 68, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "43", "is_indirect_2": true},
+  {"index": 69, "opcode": "mov", "arg_1": "r2", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 70, "opcode": "dec", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 71, "opcode": "jng", "arg_1": "81", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 72, "opcode": "inc", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 73, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "43", "is_indirect_2": true},
+  {"index": 74, "opcode": "mov", "arg_1": "39", "is_indirect_1": true, "arg_2": "r0", "is_indirect_2": false},
+  {"index": 75, "opcode": "dec", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 76, "opcode": "jng", "arg_1": "81", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 77, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "39", "is_indirect_2": false},
+  {"index": 78, "opcode": "inc", "arg_1": "r0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 79, "opcode": "mov", "arg_1": "39", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+  {"index": 80, "opcode": "jmp", "arg_1": "70", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 81, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "38", "is_indirect_2": true},
+  {"index": 82, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "41", "is_indirect_2": false},
+  {"index": 83, "opcode": "sub", "arg_1": "r0", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 84, "opcode": "mov", "arg_1": "r3", "is_indirect_1": false, "arg_2": "38", "is_indirect_2": false},
+  {"index": 85, "opcode": "inc", "arg_1": "r3", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 86, "opcode": "mov", "arg_1": "38", "is_indirect_1": false, "arg_2": "r3", "is_indirect_2": false},
+  {"index": 87, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "38", "is_indirect_2": true},
+  {"index": 88, "opcode": "dec", "arg_1": "r0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 89, "opcode": "jg", "arg_1": "91", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 90, "opcode": "jmp", "arg_1": "96", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 91, "opcode": "mov", "arg_1": "44", "is_indirect_1": true, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 92, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "38", "is_indirect_2": false},
+  {"index": 93, "opcode": "inc", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 94, "opcode": "mov", "arg_1": "38", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 95, "opcode": "jmp", "arg_1": "87", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 96, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "40", "is_indirect_2": true},
+  {"index": 97, "opcode": "jmp", "arg_1": "98", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 98, "opcode": "mov", "arg_1": "44", "is_indirect_1": true, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 99, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "40", "is_indirect_2": false},
+  {"index": 100, "opcode": "inc", "arg_1": "r1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 101, "opcode": "mov", "arg_1": "40", "is_indirect_1": false, "arg_2": "r1", "is_indirect_2": false},
+  {"index": 102, "opcode": "dec", "arg_1": "r2", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 103, "opcode": "jnz", "arg_1": "96", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 104, "opcode": "jmp", "arg_1": "105", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+  {"index": 105, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "35", "is_indirect_2": false},
+  {"index": 106, "opcode": "mov", "arg_1": "44", "is_indirect_1": true, "arg_2": "r0", "is_indirect_2": false},
+  {"index": 107, "opcode": "hlt", "arg_1": null, "is_indirect_1": null, "arg_2": null, "is_indirect_2": null},
+  {"index": 108, "opcode": "nop", "arg_1": "0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null}]
+out_stdout: |
+  source LoC: 120 code instr: 106
+  ============================================================
+  What is your name? Hello, Arseni!
+  []
+  instr_counter:   358
+  ticks_counter:  2483
+out_log: |
+ DEBUG    machine.py     INSTR: jmp 45       | R0:        0 | R1:        0 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   45
+ DEBUG    machine.py     INSTR: mov r0, (37) | R0:       49 | R1:        0 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   46
+ DEBUG    machine.py     INSTR: mov r1, 41   | R0:       49 | R1:       48 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   47
+ DEBUG    machine.py     INSTR: sub r0, r1   | R0:        1 | R1:       48 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   48
+ DEBUG    machine.py     INSTR: mov r1, 42   | R0:        1 | R1:       10 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   49
+ DEBUG    machine.py     INSTR: mul r0, r1   | R0:       10 | R1:       10 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   50
+ DEBUG    machine.py     INSTR: mov r3, 37   | R0:       10 | R1:       10 | R2:        0 | R3:        4 | N: 0 | Z: 0 | PC:   51
+ DEBUG    machine.py     INSTR: inc r3       | R0:       10 | R1:       10 | R2:        0 | R3:        5 | N: 0 | Z: 0 | PC:   52
+ DEBUG    machine.py     INSTR: mov 37, r3   | R0:       10 | R1:       10 | R2:        0 | R3:        5 | N: 0 | Z: 0 | PC:   53
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       10 | R1:       56 | R2:        0 | R3:        5 | N: 0 | Z: 0 | PC:   54
+ DEBUG    machine.py     INSTR: mov r2, 41   | R0:       10 | R1:       56 | R2:       48 | R3:        5 | N: 0 | Z: 0 | PC:   55
+ DEBUG    machine.py     INSTR: sub r1, r2   | R0:       10 | R1:        8 | R2:       48 | R3:        5 | N: 0 | Z: 0 | PC:   56
+ DEBUG    machine.py     INSTR: add r0, r1   | R0:       18 | R1:        8 | R2:       48 | R3:        5 | N: 0 | Z: 0 | PC:   57
+ DEBUG    machine.py     INSTR: inc r3       | R0:       18 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   58
+ DEBUG    machine.py     INSTR: mov 37, r3   | R0:       18 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       18 | R1:       87 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       17 | R1:       87 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       17 | R1:       87 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: '' << 'W'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       17 | R1:       87 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       17 | R1:        6 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       17 | R1:        7 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       17 | R1:        7 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       17 | R1:        7 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       17 | R1:      104 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       16 | R1:      104 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       16 | R1:      104 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'W' << 'h'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       16 | R1:      104 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       16 | R1:        7 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       16 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       16 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       16 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       16 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       15 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       15 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'Wh' << 'a'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       15 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       15 | R1:        8 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       15 | R1:        9 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       15 | R1:        9 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       15 | R1:        9 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       15 | R1:      116 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       14 | R1:      116 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       14 | R1:      116 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'Wha' << 't'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       14 | R1:      116 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       14 | R1:        9 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       14 | R1:       10 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       14 | R1:       10 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       14 | R1:       10 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       14 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       13 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       13 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What' << ' '
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       13 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       13 | R1:       10 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       13 | R1:       11 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       13 | R1:       11 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       13 | R1:       11 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       13 | R1:      105 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       12 | R1:      105 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       12 | R1:      105 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What ' << 'i'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       12 | R1:      105 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       12 | R1:       11 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       12 | R1:       12 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       12 | R1:       12 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       12 | R1:       12 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       12 | R1:      115 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       11 | R1:      115 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       11 | R1:      115 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What i' << 's'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       11 | R1:      115 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       11 | R1:       12 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       11 | R1:       13 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       11 | R1:       13 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       11 | R1:       13 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       11 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       10 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       10 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is' << ' '
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       10 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:       10 | R1:       13 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:       10 | R1:       14 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:       10 | R1:       14 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:       10 | R1:       14 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:       10 | R1:      121 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        9 | R1:      121 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        9 | R1:      121 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is ' << 'y'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        9 | R1:      121 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        9 | R1:       14 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        9 | R1:       15 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        9 | R1:       15 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        9 | R1:       15 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        9 | R1:      111 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        8 | R1:      111 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        8 | R1:      111 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is y' << 'o'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        8 | R1:      111 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        8 | R1:       15 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        8 | R1:       16 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        8 | R1:       16 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        8 | R1:       16 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        8 | R1:      117 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        7 | R1:      117 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        7 | R1:      117 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is yo' << 'u'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        7 | R1:      117 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        7 | R1:       16 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        7 | R1:       17 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        7 | R1:       17 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        7 | R1:       17 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        7 | R1:      114 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        6 | R1:      114 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        6 | R1:      114 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is you' << 'r'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        6 | R1:      114 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        6 | R1:       17 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        6 | R1:       18 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        6 | R1:       18 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        6 | R1:       18 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        6 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        5 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        5 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your' << ' '
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        5 | R1:       32 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        5 | R1:       18 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        5 | R1:       19 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        5 | R1:       19 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        5 | R1:       19 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        5 | R1:      110 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        4 | R1:      110 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        4 | R1:      110 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your ' << 'n'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        4 | R1:      110 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        4 | R1:       19 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        4 | R1:       20 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        4 | R1:       20 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        4 | R1:       20 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        4 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        3 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        3 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your n' << 'a'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        3 | R1:       97 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        3 | R1:       20 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        3 | R1:       21 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        3 | R1:       21 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        3 | R1:       21 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        3 | R1:      109 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        2 | R1:      109 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        2 | R1:      109 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your na' << 'm'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        2 | R1:      109 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        2 | R1:       21 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        2 | R1:       22 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        2 | R1:       22 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        2 | R1:       22 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        2 | R1:      101 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        1 | R1:      101 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        1 | R1:      101 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your nam' << 'e'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        1 | R1:      101 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        1 | R1:       22 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        1 | R1:       23 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        1 | R1:       23 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        1 | R1:       23 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        1 | R1:       63 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:        0 | R1:       63 | R2:       48 | R3:        6 | N: 0 | Z: 1 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:        0 | R1:       63 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   63
+ DEBUG    machine.py    output_str_buffer: 'What is your name' << '?'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        0 | R1:       63 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   64
+ DEBUG    machine.py     INSTR: mov r1, 37   | R0:        0 | R1:       23 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   65
+ DEBUG    machine.py     INSTR: inc r1       | R0:        0 | R1:       24 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   66
+ DEBUG    machine.py     INSTR: mov 37, r1   | R0:        0 | R1:       24 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   67
+ DEBUG    machine.py     INSTR: jmp 59       | R0:        0 | R1:       24 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   59
+ DEBUG    machine.py     INSTR: mov r1, (37) | R0:        0 | R1:        0 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   60
+ DEBUG    machine.py     INSTR: dec r0       | R0:       -1 | R1:        0 | R2:       48 | R3:        6 | N: 1 | Z: 0 | PC:   61
+ DEBUG    machine.py     INSTR: jg 63        | R0:       -1 | R1:        0 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   62
+ DEBUG    machine.py     INSTR: jmp 68       | R0:       -1 | R1:        0 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   68
+ DEBUG    machine.py    input: 6
+ DEBUG    machine.py     INSTR: mov r1, (43) | R0:       -1 | R1:        6 | R2:       48 | R3:        6 | N: 0 | Z: 0 | PC:   69
+ DEBUG    machine.py     INSTR: mov r2, r1   | R0:       -1 | R1:        6 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:       -1 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:       -1 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:        6 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 'A'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:       65 | R1:        6 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:       65 | R1:        6 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:       65 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:       65 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      108 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      109 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      109 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      109 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      109 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      109 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:      109 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 'r'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:      114 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:      114 | R1:        5 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:      114 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:      114 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      109 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      110 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      110 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      110 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      110 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      110 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:      110 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 's'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:      115 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:      115 | R1:        4 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:      115 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:      115 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      110 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      111 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      111 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      111 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      111 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      111 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:      111 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 'e'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:      101 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:      101 | R1:        3 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:      101 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:      101 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      111 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      112 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      112 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      112 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      112 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      112 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:      112 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 'n'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:      110 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:      110 | R1:        2 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:      110 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:      110 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      112 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      113 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      113 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      113 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      113 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 1 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      113 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   72
+ DEBUG    machine.py     INSTR: inc r1       | R0:      113 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   73
+ DEBUG    machine.py    input: 'i'
+ DEBUG    machine.py     INSTR: mov r0, (43) | R0:      105 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   74
+ DEBUG    machine.py     INSTR: mov (39), r0 | R0:      105 | R1:        1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   75
+ DEBUG    machine.py     INSTR: dec r1       | R0:      105 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 1 | PC:   76
+ DEBUG    machine.py     INSTR: jng 81       | R0:      105 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   77
+ DEBUG    machine.py     INSTR: mov r0, 39   | R0:      113 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   78
+ DEBUG    machine.py     INSTR: inc r0       | R0:      114 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   79
+ DEBUG    machine.py     INSTR: mov 39, r0   | R0:      114 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   80
+ DEBUG    machine.py     INSTR: jmp 70       | R0:      114 | R1:        0 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   70
+ DEBUG    machine.py     INSTR: dec r1       | R0:      114 | R1:       -1 | R2:        6 | R3:        6 | N: 1 | Z: 0 | PC:   71
+ DEBUG    machine.py     INSTR: jng 81       | R0:      114 | R1:       -1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   81
+ DEBUG    machine.py     INSTR: mov r0, (38) | R0:       56 | R1:       -1 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   82
+ DEBUG    machine.py     INSTR: mov r1, 41   | R0:       56 | R1:       48 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   83
+ DEBUG    machine.py     INSTR: sub r0, r1   | R0:        8 | R1:       48 | R2:        6 | R3:        6 | N: 0 | Z: 0 | PC:   84
+ DEBUG    machine.py     INSTR: mov r3, 38   | R0:        8 | R1:       48 | R2:        6 | R3:       25 | N: 0 | Z: 0 | PC:   85
+ DEBUG    machine.py     INSTR: inc r3       | R0:        8 | R1:       48 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   86
+ DEBUG    machine.py     INSTR: mov 38, r3   | R0:        8 | R1:       48 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        8 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        7 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        7 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name?' << ' '
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        7 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        7 | R1:       26 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        7 | R1:       27 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        7 | R1:       27 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        7 | R1:       27 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        7 | R1:       72 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        6 | R1:       72 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        6 | R1:       72 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? ' << 'H'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        6 | R1:       72 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        6 | R1:       27 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        6 | R1:       28 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        6 | R1:       28 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        6 | R1:       28 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        6 | R1:      101 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        5 | R1:      101 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        5 | R1:      101 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? H' << 'e'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        5 | R1:      101 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        5 | R1:       28 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        5 | R1:       29 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        5 | R1:       29 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        5 | R1:       29 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        5 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        4 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        4 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? He' << 'l'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        4 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        4 | R1:       29 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        4 | R1:       30 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        4 | R1:       30 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        4 | R1:       30 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        4 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        3 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        3 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hel' << 'l'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        3 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        3 | R1:       30 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        3 | R1:       31 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        3 | R1:       31 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        3 | R1:       31 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        3 | R1:      111 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        2 | R1:      111 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        2 | R1:      111 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hell' << 'o'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        2 | R1:      111 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        2 | R1:       31 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        2 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        2 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        2 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        2 | R1:       44 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        1 | R1:       44 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        1 | R1:       44 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello' << ','
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        1 | R1:       44 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        1 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        1 | R1:       33 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        1 | R1:       33 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        1 | R1:       33 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        1 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:        0 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 1 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:        0 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   91
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello,' << ' '
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:        0 | R1:       32 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   92
+ DEBUG    machine.py     INSTR: mov r1, 38   | R0:        0 | R1:       33 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   93
+ DEBUG    machine.py     INSTR: inc r1       | R0:        0 | R1:       34 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   94
+ DEBUG    machine.py     INSTR: mov 38, r1   | R0:        0 | R1:       34 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   95
+ DEBUG    machine.py     INSTR: jmp 87       | R0:        0 | R1:       34 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   87
+ DEBUG    machine.py     INSTR: mov r1, (38) | R0:        0 | R1:        0 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   88
+ DEBUG    machine.py     INSTR: dec r0       | R0:       -1 | R1:        0 | R2:        6 | R3:       26 | N: 1 | Z: 0 | PC:   89
+ DEBUG    machine.py     INSTR: jg 91        | R0:       -1 | R1:        0 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   90
+ DEBUG    machine.py     INSTR: jmp 96       | R0:       -1 | R1:        0 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:       65 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:       65 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, ' << 'A'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:       65 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      108 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      109 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      109 | R2:        6 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      109 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      109 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:      114 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:      114 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, A' << 'r'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:      114 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      109 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      110 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      110 | R2:        5 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      110 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      110 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:      115 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:      115 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, Ar' << 's'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:      115 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      110 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      111 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      111 | R2:        4 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      111 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      111 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:      101 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:      101 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, Ars' << 'e'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:      101 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      111 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      112 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      112 | R2:        3 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      112 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      112 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:      110 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:      110 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, Arse' << 'n'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:      110 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      112 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      113 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      113 | R2:        2 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      113 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      113 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:   96
+ DEBUG    machine.py     INSTR: mov r1, (40) | R0:       -1 | R1:      105 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:   97
+ DEBUG    machine.py     INSTR: jmp 98       | R0:       -1 | R1:      105 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:   98
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, Arsen' << 'i'
+ DEBUG    machine.py     INSTR: mov (44), r1 | R0:       -1 | R1:      105 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:   99
+ DEBUG    machine.py     INSTR: mov r1, 40   | R0:       -1 | R1:      113 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:  100
+ DEBUG    machine.py     INSTR: inc r1       | R0:       -1 | R1:      114 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:  101
+ DEBUG    machine.py     INSTR: mov 40, r1   | R0:       -1 | R1:      114 | R2:        1 | R3:       26 | N: 0 | Z: 0 | PC:  102
+ DEBUG    machine.py     INSTR: dec r2       | R0:       -1 | R1:      114 | R2:        0 | R3:       26 | N: 0 | Z: 1 | PC:  103
+ DEBUG    machine.py     INSTR: jnz 96       | R0:       -1 | R1:      114 | R2:        0 | R3:       26 | N: 0 | Z: 0 | PC:  104
+ DEBUG    machine.py     INSTR: jmp 105      | R0:       -1 | R1:      114 | R2:        0 | R3:       26 | N: 0 | Z: 0 | PC:  105
+ DEBUG    machine.py     INSTR: mov r0, 35   | R0:       33 | R1:      114 | R2:        0 | R3:       26 | N: 0 | Z: 0 | PC:  106
+ DEBUG    machine.py    output_str_buffer: 'What is your name? Hello, Arseni' << '!'
+ DEBUG    machine.py     INSTR: mov (44), r0 | R0:       33 | R1:      114 | R2:        0 | R3:       26 | N: 0 | Z: 0 | PC:  107
+ INFO    machine.py    output_str_buffer: 'What is your name? Hello, Arseni!'
+ INFO    machine.py    output_int_buffer: []

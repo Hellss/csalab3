@@ -1,0 +1,536 @@
+in_source: |-
+ max_limit:
+   .word 4000000    ; Максимальное значение для чисел Фибоначчи (4 миллиона)
+ a:
+   .word 1          ; Первое число Фибоначчи
+ b:
+   .word 1          ; Второе число Фибоначчи
+ sum_even:
+   .word 0          ; Сумма четных чисел Фибоначчи
+ out_addr:
+   .word 3          ; Адрес для вывода суммы
+ div2:
+   .word 2
+ 
+ _start:
+   loop:
+     mov r0, b            ; Загрузка значения b в r0
+     mov r1, max_limit    ; Загрузка значения max_limit в r1
+     sub r1, r0           ; Вычитание r0 из r1 (r1 = max_limit - b)
+     jng output           ; Если b >= max_limit, переход к метке output
+
+     mov r2, r0           ; r2 = b 
+     mov r3, div2         ; r3 = 2
+     mod r2, r3           ; r2 = b % 2
+     jnz next_fib         ; Если b нечетное, переход к метке next_fib
+
+     mov r3, sum_even     ; Загрузка значения sum_even в r3 
+     add r3, r0           ; r3 = sum_even + b
+     mov sum_even, r3     ; Сохранение r3 в sum_even
+
+   next_fib:
+     mov r2, a            ; Загрузка значения a в r2
+     add r2, r0           ; r2 = a + b
+     mov a, r0            ; Сохранение текущего b в a
+     mov b, r2            ; Сохранение нового значения b (a + b)
+     jmp loop             ; Переход к началу цикла loop
+
+   output:
+     mov r0, sum_even     ; Загрузка значения sum_even в r0
+     mov (out_addr), r0   ; Сохранение r0 в памяти по адресу out_addr
+     hlt                  ; Остановка программы
+in_stdin: |
+out_code: |-
+  [{"index": 0, "opcode": "jmp", "arg_1": "10", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 4, "opcode": "nop", "arg_1": "4000000", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 5, "opcode": "nop", "arg_1": "1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 6, "opcode": "nop", "arg_1": "1", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 7, "opcode": "nop", "arg_1": "0", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 8, "opcode": "nop", "arg_1": "3", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 9, "opcode": "nop", "arg_1": "2", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 10, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "6", "is_indirect_2": false},
+   {"index": 11, "opcode": "mov", "arg_1": "r1", "is_indirect_1": false, "arg_2": "4", "is_indirect_2": false},
+   {"index": 12, "opcode": "sub", "arg_1": "r1", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 13, "opcode": "jng", "arg_1": "26", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 14, "opcode": "mov", "arg_1": "r2", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 15, "opcode": "mov", "arg_1": "r3", "is_indirect_1": false, "arg_2": "9", "is_indirect_2": false},
+   {"index": 16, "opcode": "mod", "arg_1": "r2", "is_indirect_1": false, "arg_2": "r3", "is_indirect_2": false},
+   {"index": 17, "opcode": "jnz", "arg_1": "21", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 18, "opcode": "mov", "arg_1": "r3", "is_indirect_1": false, "arg_2": "7", "is_indirect_2": false},
+   {"index": 19, "opcode": "add", "arg_1": "r3", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 20, "opcode": "mov", "arg_1": "7", "is_indirect_1": false, "arg_2": "r3", "is_indirect_2": false},
+   {"index": 21, "opcode": "mov", "arg_1": "r2", "is_indirect_1": false, "arg_2": "5", "is_indirect_2": false},
+   {"index": 22, "opcode": "add", "arg_1": "r2", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 23, "opcode": "mov", "arg_1": "5", "is_indirect_1": false, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 24, "opcode": "mov", "arg_1": "6", "is_indirect_1": false, "arg_2": "r2", "is_indirect_2": false},
+   {"index": 25, "opcode": "jmp", "arg_1": "10", "is_indirect_1": false, "arg_2": null, "is_indirect_2": null},
+   {"index": 26, "opcode": "mov", "arg_1": "r0", "is_indirect_1": false, "arg_2": "7", "is_indirect_2": false},
+   {"index": 27, "opcode": "mov", "arg_1": "8", "is_indirect_1": true, "arg_2": "r0", "is_indirect_2": false},
+   {"index": 28, "opcode": "hlt", "arg_1": null, "is_indirect_1": null, "arg_2": null, "is_indirect_2": null}]
+out_stdout: |
+  source LoC: 40 code instr: 26
+  ============================================================
+
+  [4613732]
+  instr_counter:   456
+  ticks_counter:  3275
+out_log: |
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        0 | R1:        0 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:        1 | R1:        0 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:        1 | R1:  4000000 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:        1 | R1:  3999999 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:        1 | R1:  3999999 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:        1 | R1:  3999999 | R2:        1 | R3:        0 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:        1 | R1:  3999999 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:        1 | R1:  3999999 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:        1 | R1:  3999999 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:        1 | R1:  3999999 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:        1 | R1:  3999999 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:        1 | R1:  3999999 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:        1 | R1:  3999999 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        1 | R1:  3999999 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:        2 | R1:  3999999 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:        2 | R1:  4000000 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:        2 | R1:  3999998 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:        2 | R1:  3999998 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:        2 | R1:  3999998 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:        2 | R1:  3999998 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:        2 | R1:  3999998 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:        2 | R1:  3999998 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:        2 | R1:  3999998 | R2:        0 | R3:        0 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:        2 | R1:  3999998 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:        2 | R1:  3999998 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:        2 | R1:  3999998 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:        2 | R1:  3999998 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:        2 | R1:  3999998 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:        2 | R1:  3999998 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        2 | R1:  3999998 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:        3 | R1:  3999998 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:        3 | R1:  4000000 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:        3 | R1:  3999997 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:        3 | R1:  3999997 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:        3 | R1:  3999997 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:        3 | R1:  3999997 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:        3 | R1:  3999997 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:        3 | R1:  3999997 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:        3 | R1:  3999997 | R2:        2 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:        3 | R1:  3999997 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:        3 | R1:  3999997 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:        3 | R1:  3999997 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        3 | R1:  3999997 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:        5 | R1:  3999997 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:        5 | R1:  4000000 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:        5 | R1:  3999995 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:        5 | R1:  3999995 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:        5 | R1:  3999995 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:        5 | R1:  3999995 | R2:        5 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:        5 | R1:  3999995 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:        5 | R1:  3999995 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:        5 | R1:  3999995 | R2:        3 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:        5 | R1:  3999995 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:        5 | R1:  3999995 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:        5 | R1:  3999995 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        5 | R1:  3999995 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:        8 | R1:  3999995 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:        8 | R1:  4000000 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:        8 | R1:  3999992 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:        8 | R1:  3999992 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:        8 | R1:  3999992 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:        8 | R1:  3999992 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:        8 | R1:  3999992 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:        8 | R1:  3999992 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:        8 | R1:  3999992 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:        8 | R1:  3999992 | R2:        0 | R3:       10 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:        8 | R1:  3999992 | R2:        0 | R3:       10 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:        8 | R1:  3999992 | R2:        5 | R3:       10 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:        8 | R1:  3999992 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:        8 | R1:  3999992 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:        8 | R1:  3999992 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:        8 | R1:  3999992 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:       13 | R1:  3999992 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:       13 | R1:  4000000 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:       13 | R1:  3999987 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:       13 | R1:  3999987 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:       13 | R1:  3999987 | R2:       13 | R3:       10 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:       13 | R1:  3999987 | R2:       13 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:       13 | R1:  3999987 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:       13 | R1:  3999987 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:       13 | R1:  3999987 | R2:        8 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:       13 | R1:  3999987 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:       13 | R1:  3999987 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:       13 | R1:  3999987 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:       13 | R1:  3999987 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:       21 | R1:  3999987 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:       21 | R1:  4000000 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:       21 | R1:  3999979 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:       21 | R1:  3999979 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:       21 | R1:  3999979 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:       21 | R1:  3999979 | R2:       21 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:       21 | R1:  3999979 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:       21 | R1:  3999979 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:       21 | R1:  3999979 | R2:       13 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:       21 | R1:  3999979 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:       21 | R1:  3999979 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:       21 | R1:  3999979 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:       21 | R1:  3999979 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:       34 | R1:  3999979 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:       34 | R1:  4000000 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:       34 | R1:  3999966 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:       34 | R1:  3999966 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:       34 | R1:  3999966 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:       34 | R1:  3999966 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:       34 | R1:  3999966 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:       34 | R1:  3999966 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:       34 | R1:  3999966 | R2:        0 | R3:       10 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:       34 | R1:  3999966 | R2:        0 | R3:       44 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:       34 | R1:  3999966 | R2:        0 | R3:       44 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:       34 | R1:  3999966 | R2:       21 | R3:       44 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:       34 | R1:  3999966 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:       34 | R1:  3999966 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:       34 | R1:  3999966 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:       34 | R1:  3999966 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:       55 | R1:  3999966 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:       55 | R1:  4000000 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:       55 | R1:  3999945 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:       55 | R1:  3999945 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:       55 | R1:  3999945 | R2:       55 | R3:       44 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:       55 | R1:  3999945 | R2:       55 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:       55 | R1:  3999945 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:       55 | R1:  3999945 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:       55 | R1:  3999945 | R2:       34 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:       55 | R1:  3999945 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:       55 | R1:  3999945 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:       55 | R1:  3999945 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:       55 | R1:  3999945 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:       89 | R1:  3999945 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:       89 | R1:  4000000 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:       89 | R1:  3999911 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:       89 | R1:  3999911 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:       89 | R1:  3999911 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:       89 | R1:  3999911 | R2:       89 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:       89 | R1:  3999911 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:       89 | R1:  3999911 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:       89 | R1:  3999911 | R2:       55 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:       89 | R1:  3999911 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:       89 | R1:  3999911 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:       89 | R1:  3999911 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:       89 | R1:  3999911 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:      144 | R1:  3999911 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:      144 | R1:  4000000 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:      144 | R1:  3999856 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:      144 | R1:  3999856 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:      144 | R1:  3999856 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:      144 | R1:  3999856 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:      144 | R1:  3999856 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:      144 | R1:  3999856 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:      144 | R1:  3999856 | R2:        0 | R3:       44 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:      144 | R1:  3999856 | R2:        0 | R3:      188 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:      144 | R1:  3999856 | R2:        0 | R3:      188 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:      144 | R1:  3999856 | R2:       89 | R3:      188 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:      144 | R1:  3999856 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:      144 | R1:  3999856 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:      144 | R1:  3999856 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:      144 | R1:  3999856 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:      233 | R1:  3999856 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:      233 | R1:  4000000 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:      233 | R1:  3999767 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:      233 | R1:  3999767 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:      233 | R1:  3999767 | R2:      233 | R3:      188 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:      233 | R1:  3999767 | R2:      233 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:      233 | R1:  3999767 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:      233 | R1:  3999767 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:      233 | R1:  3999767 | R2:      144 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:      233 | R1:  3999767 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:      233 | R1:  3999767 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:      233 | R1:  3999767 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:      233 | R1:  3999767 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:      377 | R1:  3999767 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:      377 | R1:  4000000 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:      377 | R1:  3999623 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:      377 | R1:  3999623 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:      377 | R1:  3999623 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:      377 | R1:  3999623 | R2:      377 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:      377 | R1:  3999623 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:      377 | R1:  3999623 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:      377 | R1:  3999623 | R2:      233 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:      377 | R1:  3999623 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:      377 | R1:  3999623 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:      377 | R1:  3999623 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:      377 | R1:  3999623 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:      610 | R1:  3999623 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:      610 | R1:  4000000 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:      610 | R1:  3999390 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:      610 | R1:  3999390 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:      610 | R1:  3999390 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:      610 | R1:  3999390 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:      610 | R1:  3999390 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:      610 | R1:  3999390 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:      610 | R1:  3999390 | R2:        0 | R3:      188 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:      610 | R1:  3999390 | R2:        0 | R3:      798 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:      610 | R1:  3999390 | R2:        0 | R3:      798 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:      610 | R1:  3999390 | R2:      377 | R3:      798 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:      610 | R1:  3999390 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:      610 | R1:  3999390 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:      610 | R1:  3999390 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:      610 | R1:  3999390 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:      987 | R1:  3999390 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:      987 | R1:  4000000 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:      987 | R1:  3999013 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:      987 | R1:  3999013 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:      987 | R1:  3999013 | R2:      987 | R3:      798 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:      987 | R1:  3999013 | R2:      987 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:      987 | R1:  3999013 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:      987 | R1:  3999013 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:      987 | R1:  3999013 | R2:      610 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:      987 | R1:  3999013 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:      987 | R1:  3999013 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:      987 | R1:  3999013 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:      987 | R1:  3999013 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:     1597 | R1:  3999013 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:     1597 | R1:  4000000 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:     1597 | R1:  3998403 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:     1597 | R1:  3998403 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:     1597 | R1:  3998403 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:     1597 | R1:  3998403 | R2:     1597 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:     1597 | R1:  3998403 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:     1597 | R1:  3998403 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:     1597 | R1:  3998403 | R2:      987 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:     1597 | R1:  3998403 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:     1597 | R1:  3998403 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:     1597 | R1:  3998403 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:     1597 | R1:  3998403 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:     2584 | R1:  3998403 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:     2584 | R1:  4000000 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:     2584 | R1:  3997416 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:     2584 | R1:  3997416 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:     2584 | R1:  3997416 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:     2584 | R1:  3997416 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:     2584 | R1:  3997416 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:     2584 | R1:  3997416 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:     2584 | R1:  3997416 | R2:        0 | R3:      798 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:     2584 | R1:  3997416 | R2:        0 | R3:     3382 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:     2584 | R1:  3997416 | R2:        0 | R3:     3382 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:     2584 | R1:  3997416 | R2:     1597 | R3:     3382 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:     2584 | R1:  3997416 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:     2584 | R1:  3997416 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:     2584 | R1:  3997416 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:     2584 | R1:  3997416 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:     4181 | R1:  3997416 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:     4181 | R1:  4000000 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:     4181 | R1:  3995819 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:     4181 | R1:  3995819 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:     4181 | R1:  3995819 | R2:     4181 | R3:     3382 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:     4181 | R1:  3995819 | R2:     4181 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:     4181 | R1:  3995819 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:     4181 | R1:  3995819 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:     4181 | R1:  3995819 | R2:     2584 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:     4181 | R1:  3995819 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:     4181 | R1:  3995819 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:     4181 | R1:  3995819 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:     4181 | R1:  3995819 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:     6765 | R1:  3995819 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:     6765 | R1:  4000000 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:     6765 | R1:  3993235 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:     6765 | R1:  3993235 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:     6765 | R1:  3993235 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:     6765 | R1:  3993235 | R2:     6765 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:     6765 | R1:  3993235 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:     6765 | R1:  3993235 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:     6765 | R1:  3993235 | R2:     4181 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:     6765 | R1:  3993235 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:     6765 | R1:  3993235 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:     6765 | R1:  3993235 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:     6765 | R1:  3993235 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:    10946 | R1:  3993235 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:    10946 | R1:  4000000 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:    10946 | R1:  3989054 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:    10946 | R1:  3989054 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:    10946 | R1:  3989054 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:    10946 | R1:  3989054 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:    10946 | R1:  3989054 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:    10946 | R1:  3989054 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:    10946 | R1:  3989054 | R2:        0 | R3:     3382 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:    10946 | R1:  3989054 | R2:        0 | R3:    14328 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:    10946 | R1:  3989054 | R2:        0 | R3:    14328 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:    10946 | R1:  3989054 | R2:     6765 | R3:    14328 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:    10946 | R1:  3989054 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:    10946 | R1:  3989054 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:    10946 | R1:  3989054 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:    10946 | R1:  3989054 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:    17711 | R1:  3989054 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:    17711 | R1:  4000000 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:    17711 | R1:  3982289 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:    17711 | R1:  3982289 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:    17711 | R1:  3982289 | R2:    17711 | R3:    14328 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:    17711 | R1:  3982289 | R2:    17711 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:    17711 | R1:  3982289 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:    17711 | R1:  3982289 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:    17711 | R1:  3982289 | R2:    10946 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:    17711 | R1:  3982289 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:    17711 | R1:  3982289 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:    17711 | R1:  3982289 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:    17711 | R1:  3982289 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:    28657 | R1:  3982289 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:    28657 | R1:  4000000 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:    28657 | R1:  3971343 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:    28657 | R1:  3971343 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:    28657 | R1:  3971343 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:    28657 | R1:  3971343 | R2:    28657 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:    28657 | R1:  3971343 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:    28657 | R1:  3971343 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:    28657 | R1:  3971343 | R2:    17711 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:    28657 | R1:  3971343 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:    28657 | R1:  3971343 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:    28657 | R1:  3971343 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:    28657 | R1:  3971343 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:    46368 | R1:  3971343 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:    46368 | R1:  4000000 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:    46368 | R1:  3953632 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:    46368 | R1:  3953632 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:    46368 | R1:  3953632 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:    46368 | R1:  3953632 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:    46368 | R1:  3953632 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:    46368 | R1:  3953632 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:    46368 | R1:  3953632 | R2:        0 | R3:    14328 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:    46368 | R1:  3953632 | R2:        0 | R3:    60696 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:    46368 | R1:  3953632 | R2:        0 | R3:    60696 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:    46368 | R1:  3953632 | R2:    28657 | R3:    60696 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:    46368 | R1:  3953632 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:    46368 | R1:  3953632 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:    46368 | R1:  3953632 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:    46368 | R1:  3953632 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:    75025 | R1:  3953632 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:    75025 | R1:  4000000 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:    75025 | R1:  3924975 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:    75025 | R1:  3924975 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:    75025 | R1:  3924975 | R2:    75025 | R3:    60696 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:    75025 | R1:  3924975 | R2:    75025 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:    75025 | R1:  3924975 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:    75025 | R1:  3924975 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:    75025 | R1:  3924975 | R2:    46368 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:    75025 | R1:  3924975 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:    75025 | R1:  3924975 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:    75025 | R1:  3924975 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:    75025 | R1:  3924975 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:   121393 | R1:  3924975 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:   121393 | R1:  4000000 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:   121393 | R1:  3878607 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:   121393 | R1:  3878607 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:   121393 | R1:  3878607 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:   121393 | R1:  3878607 | R2:   121393 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:   121393 | R1:  3878607 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:   121393 | R1:  3878607 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:   121393 | R1:  3878607 | R2:    75025 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:   121393 | R1:  3878607 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:   121393 | R1:  3878607 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:   121393 | R1:  3878607 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:   121393 | R1:  3878607 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:   196418 | R1:  3878607 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:   196418 | R1:  4000000 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:   196418 | R1:  3803582 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:   196418 | R1:  3803582 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:   196418 | R1:  3803582 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:   196418 | R1:  3803582 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:   196418 | R1:  3803582 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:   196418 | R1:  3803582 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:   196418 | R1:  3803582 | R2:        0 | R3:    60696 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:   196418 | R1:  3803582 | R2:        0 | R3:   257114 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:   196418 | R1:  3803582 | R2:        0 | R3:   257114 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:   196418 | R1:  3803582 | R2:   121393 | R3:   257114 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:   196418 | R1:  3803582 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:   196418 | R1:  3803582 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:   196418 | R1:  3803582 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:   196418 | R1:  3803582 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:   317811 | R1:  3803582 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:   317811 | R1:  4000000 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:   317811 | R1:  3682189 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:   317811 | R1:  3682189 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:   317811 | R1:  3682189 | R2:   317811 | R3:   257114 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:   317811 | R1:  3682189 | R2:   317811 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:   317811 | R1:  3682189 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:   317811 | R1:  3682189 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:   317811 | R1:  3682189 | R2:   196418 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:   317811 | R1:  3682189 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:   317811 | R1:  3682189 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:   317811 | R1:  3682189 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:   317811 | R1:  3682189 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:   514229 | R1:  3682189 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:   514229 | R1:  4000000 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:   514229 | R1:  3485771 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:   514229 | R1:  3485771 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:   514229 | R1:  3485771 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:   514229 | R1:  3485771 | R2:   514229 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:   514229 | R1:  3485771 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:   514229 | R1:  3485771 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:   514229 | R1:  3485771 | R2:   317811 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:   514229 | R1:  3485771 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:   514229 | R1:  3485771 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:   514229 | R1:  3485771 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:   514229 | R1:  3485771 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:   832040 | R1:  3485771 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:   832040 | R1:  4000000 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:   832040 | R1:  3167960 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:   832040 | R1:  3167960 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:   832040 | R1:  3167960 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:   832040 | R1:  3167960 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:   832040 | R1:  3167960 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:   832040 | R1:  3167960 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:   832040 | R1:  3167960 | R2:        0 | R3:   257114 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:   832040 | R1:  3167960 | R2:        0 | R3:  1089154 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:   832040 | R1:  3167960 | R2:        0 | R3:  1089154 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:   832040 | R1:  3167960 | R2:   514229 | R3:  1089154 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:   832040 | R1:  3167960 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:   832040 | R1:  3167960 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:   832040 | R1:  3167960 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:   832040 | R1:  3167960 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:  1346269 | R1:  3167960 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:  1346269 | R1:  4000000 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:  1346269 | R1:  2653731 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:  1346269 | R1:  2653731 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:  1346269 | R1:  2653731 | R2:  1346269 | R3:  1089154 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:  1346269 | R1:  2653731 | R2:  1346269 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:  1346269 | R1:  2653731 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:  1346269 | R1:  2653731 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:  1346269 | R1:  2653731 | R2:   832040 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:  1346269 | R1:  2653731 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:  1346269 | R1:  2653731 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:  1346269 | R1:  2653731 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:  1346269 | R1:  2653731 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:  2178309 | R1:  2653731 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:  2178309 | R1:  4000000 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:  2178309 | R1:  1821691 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:  2178309 | R1:  1821691 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:  2178309 | R1:  1821691 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:  2178309 | R1:  1821691 | R2:  2178309 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:  2178309 | R1:  1821691 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:  2178309 | R1:  1821691 | R2:        1 | R3:        2 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:  2178309 | R1:  1821691 | R2:  1346269 | R3:        2 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:  2178309 | R1:  1821691 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:  2178309 | R1:  1821691 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:  2178309 | R1:  1821691 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:  2178309 | R1:  1821691 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:  3524578 | R1:  1821691 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:  3524578 | R1:  4000000 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:  3524578 | R1:   475422 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:  3524578 | R1:   475422 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   14
+ DEBUG    machine.py     INSTR: mov r2, r0   | R0:  3524578 | R1:   475422 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   15
+ DEBUG    machine.py     INSTR: mov r3, 9    | R0:  3524578 | R1:   475422 | R2:  3524578 | R3:        2 | N: 0 | Z: 0 | PC:   16
+ DEBUG    machine.py     INSTR: mod r2, r3   | R0:  3524578 | R1:   475422 | R2:        0 | R3:        2 | N: 0 | Z: 1 | PC:   17
+ DEBUG    machine.py     INSTR: jnz 21       | R0:  3524578 | R1:   475422 | R2:        0 | R3:        2 | N: 0 | Z: 0 | PC:   18
+ DEBUG    machine.py     INSTR: mov r3, 7    | R0:  3524578 | R1:   475422 | R2:        0 | R3:  1089154 | N: 0 | Z: 0 | PC:   19
+ DEBUG    machine.py     INSTR: add r3, r0   | R0:  3524578 | R1:   475422 | R2:        0 | R3:  4613732 | N: 0 | Z: 0 | PC:   20
+ DEBUG    machine.py     INSTR: mov 7, r3    | R0:  3524578 | R1:   475422 | R2:        0 | R3:  4613732 | N: 0 | Z: 0 | PC:   21
+ DEBUG    machine.py     INSTR: mov r2, 5    | R0:  3524578 | R1:   475422 | R2:  2178309 | R3:  4613732 | N: 0 | Z: 0 | PC:   22
+ DEBUG    machine.py     INSTR: add r2, r0   | R0:  3524578 | R1:   475422 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   23
+ DEBUG    machine.py     INSTR: mov 5, r0    | R0:  3524578 | R1:   475422 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   24
+ DEBUG    machine.py     INSTR: mov 6, r2    | R0:  3524578 | R1:   475422 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   25
+ DEBUG    machine.py     INSTR: jmp 10       | R0:  3524578 | R1:   475422 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   10
+ DEBUG    machine.py     INSTR: mov r0, 6    | R0:  5702887 | R1:   475422 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   11
+ DEBUG    machine.py     INSTR: mov r1, 4    | R0:  5702887 | R1:  4000000 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   12
+ DEBUG    machine.py     INSTR: sub r1, r0   | R0:  5702887 | R1: -1702887 | R2:  5702887 | R3:  4613732 | N: 1 | Z: 0 | PC:   13
+ DEBUG    machine.py     INSTR: jng 26       | R0:  5702887 | R1: -1702887 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   26
+ DEBUG    machine.py     INSTR: mov r0, 7    | R0:  4613732 | R1: -1702887 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   27
+ DEBUG    machine.py    output_int_buffer: [] << 4613732
+ DEBUG    machine.py     INSTR: mov (8), r0  | R0:  4613732 | R1: -1702887 | R2:  5702887 | R3:  4613732 | N: 0 | Z: 0 | PC:   28
+ INFO    machine.py    output_str_buffer: ''
+ INFO    machine.py    output_int_buffer: [4613732]
